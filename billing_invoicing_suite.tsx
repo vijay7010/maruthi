@@ -102,8 +102,10 @@ const DEFAULT_INVOICES = [
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [invoices, setInvoices] = useState(() => {
+    if (typeof window === 'undefined') return DEFAULT_INVOICES;
+
     try {
-      const saved = localStorage.getItem('smt_billing_invoices_v1');
+      const saved = window.localStorage.getItem('smt_billing_invoices_v1');
       return saved ? JSON.parse(saved) : DEFAULT_INVOICES;
     } catch {
       return DEFAULT_INVOICES;
@@ -111,8 +113,10 @@ export default function App() {
   });
 
   const [companyProfile, setCompanyProfile] = useState(() => {
+    if (typeof window === 'undefined') return INITIAL_COMPANY_DETAILS;
+
     try {
-      const saved = localStorage.getItem('smt_billing_company_v1');
+      const saved = window.localStorage.getItem('smt_billing_company_v1');
       return saved ? JSON.parse(saved) : INITIAL_COMPANY_DETAILS;
     } catch {
       return INITIAL_COMPANY_DETAILS;
@@ -1026,8 +1030,7 @@ _Thank you for choosing Sree Maruthi Traders!_`;
                                   required
                                   value={item.description}
                                   onChange={(e) => {
-                                    const updated = [...currentInvoice.items];
-                                    updated[index].description = e.target.value;
+                                    const updated = currentInvoice.items.map((lineItem, itemIndex) => itemIndex === index ? { ...lineItem, description: e.target.value } : lineItem);
                                     setCurrentInvoice({ ...currentInvoice, items: updated });
                                   }}
                                   className="w-full text-sm px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-1 focus:ring-amber-500 font-medium"
@@ -1039,8 +1042,7 @@ _Thank you for choosing Sree Maruthi Traders!_`;
                                   placeholder="HSN"
                                   value={item.hsn || ''}
                                   onChange={(e) => {
-                                    const updated = [...currentInvoice.items];
-                                    updated[index].hsn = e.target.value;
+                                    const updated = currentInvoice.items.map((lineItem, itemIndex) => itemIndex === index ? { ...lineItem, hsn: e.target.value } : lineItem);
                                     setCurrentInvoice({ ...currentInvoice, items: updated });
                                   }}
                                   className="w-full text-xs px-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white font-mono"
@@ -1053,8 +1055,7 @@ _Thank you for choosing Sree Maruthi Traders!_`;
                                   step="any"
                                   value={item.quantity}
                                   onChange={(e) => {
-                                    const updated = [...currentInvoice.items];
-                                    updated[index].quantity = parseFloat(e.target.value) || 0;
+                                    const updated = currentInvoice.items.map((lineItem, itemIndex) => itemIndex === index ? { ...lineItem, quantity: parseFloat(e.target.value) || 0 } : lineItem);
                                     setCurrentInvoice({ ...currentInvoice, items: updated });
                                   }}
                                   className="w-full text-sm px-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white"
@@ -1067,8 +1068,7 @@ _Thank you for choosing Sree Maruthi Traders!_`;
                                   step="any"
                                   value={item.unitPrice}
                                   onChange={(e) => {
-                                    const updated = [...currentInvoice.items];
-                                    updated[index].unitPrice = parseFloat(e.target.value) || 0;
+                                    const updated = currentInvoice.items.map((lineItem, itemIndex) => itemIndex === index ? { ...lineItem, unitPrice: parseFloat(e.target.value) || 0 } : lineItem);
                                     setCurrentInvoice({ ...currentInvoice, items: updated });
                                   }}
                                   className="w-full text-sm px-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white font-semibold"
@@ -1078,8 +1078,7 @@ _Thank you for choosing Sree Maruthi Traders!_`;
                                 <select
                                   value={item.taxRate}
                                   onChange={(e) => {
-                                    const updated = [...currentInvoice.items];
-                                    updated[index].taxRate = parseFloat(e.target.value) || 0;
+                                    const updated = currentInvoice.items.map((lineItem, itemIndex) => itemIndex === index ? { ...lineItem, taxRate: parseFloat(e.target.value) || 0 } : lineItem);
                                     setCurrentInvoice({ ...currentInvoice, items: updated });
                                   }}
                                   className="w-full text-xs px-1 py-1.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white font-bold"
@@ -1099,8 +1098,7 @@ _Thank you for choosing Sree Maruthi Traders!_`;
                                   step="any"
                                   value={item.discount}
                                   onChange={(e) => {
-                                    const updated = [...currentInvoice.items];
-                                    updated[index].discount = parseFloat(e.target.value) || 0;
+                                    const updated = currentInvoice.items.map((lineItem, itemIndex) => itemIndex === index ? { ...lineItem, discount: parseFloat(e.target.value) || 0 } : lineItem);
                                     setCurrentInvoice({ ...currentInvoice, items: updated });
                                   }}
                                   className="w-full text-sm px-2 py-1.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white"
